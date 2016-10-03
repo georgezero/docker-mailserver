@@ -1,5 +1,6 @@
-FROM ubuntu:14.04
-MAINTAINER Thomas VIAL
+#FROM resin/rpi-raspbian
+FROM armv7/armhf-ubuntu:14.04
+MAINTAINER George Shih <georgezero@trove.nyc>
 
 # Packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -q --fix-missing && \
@@ -36,14 +37,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -q --fix-missing && \
     rsyslog \
     spamassassin \
     unzip \
-    && \
-  curl -sk http://neuro.debian.net/lists/trusty.de-m.libre > /etc/apt/sources.list.d/neurodebian.sources.list && \
-  apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9 && \
-  curl https://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add - && \
-  echo "deb http://packages.elastic.co/beats/apt stable main" | tee -a /etc/apt/sources.list.d/beats.list && \
-  apt-get update -q --fix-missing && apt-get -y upgrade fail2ban filebeat && \
-  apt-get autoclean && rm -rf /var/lib/apt/lists/* && \
-  rm -rf /usr/share/locale/* && rm -rf /usr/share/man/* && rm -rf /usr/share/doc/*
+	vim zsh git
+#    && \
+#  curl -sk http://neuro.debian.net/lists/trusty.de-m.libre > /etc/apt/sources.list.d/neurodebian.sources.list && \
+#  apt-key adv --recv-keys --keyserver hkp://pgp.mit.edu:80 0xA5D32F012649A5A9 && \
+#  curl https://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add - && \
+#  echo "deb http://packages.elastic.co/beats/apt stable main" | tee -a /etc/apt/sources.list.d/beats.list && \
+#  apt-get update -q --fix-missing && apt-get -y upgrade fail2ban filebeat && \
+#  apt-get autoclean && rm -rf /var/lib/apt/lists/* && \
+#  rm -rf /usr/share/locale/* && rm -rf /usr/share/man/* && rm -rf /usr/share/doc/*
 
 # Configures Dovecot
 RUN sed -i -e 's/include_try \/usr\/share\/dovecot\/protocols\.d/include_try \/etc\/dovecot\/protocols\.d/g' /etc/dovecot/dovecot.conf
@@ -116,6 +118,6 @@ EXPOSE 25 587 143 993 110 995 4190
 CMD /usr/local/bin/start-mailserver.sh
 
 
-ADD target/filebeat.yml.tmpl /etc/filebeat/filebeat.yml.tmpl
+#ADD target/filebeat.yml.tmpl /etc/filebeat/filebeat.yml.tmpl
 
 
